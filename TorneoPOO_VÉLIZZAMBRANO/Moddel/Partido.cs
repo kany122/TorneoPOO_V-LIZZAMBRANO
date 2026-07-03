@@ -12,6 +12,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public DateTime Fecha { get; set; }
 
         public string Lugar { get; set; }
+
+
         public void Programar(Equipo local, Equipo visitante, DateTime fecha, string lugar)
         {
             this.Local = local;
@@ -24,8 +26,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
          {
             Console.WriteLine($"Partido entre {this.Local.Nombre} y {this.Visitante.Nombre} se jugará el {this.Fecha.ToShortDateString()} en {this.Lugar}");
 
-
-
          }
+
+        //Acciones: programar, mostrar resumen.
     }
 }
