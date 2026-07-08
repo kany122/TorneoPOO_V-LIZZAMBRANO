@@ -13,17 +13,24 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 
         public string Lugar { get; set; }
 
-
+        // validar que local y visitante sean distintos
         public Partido(Equipo local, Equipo visitante, DateTime fecha, string lugar)
         {
+            
+            if (local != null && visitante != null && local.Nombre == visitante.Nombre)
+            {
+                Console.WriteLine("Error: El equipo Local y el Visitante no pueden ser el mismo.");
+                return;
+            }
+
             Local = local;
             Visitante = visitante;
             Fecha = fecha;
             Lugar = lugar;
         }
 
-        
-         public void MostrarResumen()
+
+        public void MostrarResumen()
          {
             Console.WriteLine($"Partido entre {this.Local.Nombre} y {this.Visitante.Nombre} se jugará el {this.Fecha.ToShortDateString()} en {this.Lugar}");
 

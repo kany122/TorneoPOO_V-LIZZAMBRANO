@@ -21,9 +21,16 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 
 
 
-
+        //impedir agregar jugador nulo
         public void AgregarJugador(Jugador objJugador)
         {
+           
+            if (objJugador == null)
+            {
+                Console.WriteLine("Error: No se puede agregar un jugador nulo a la lista.");
+                return; 
+            }
+
             this.Jugadores.Add(objJugador);
             Console.WriteLine($"Jugador {objJugador.Nombre} agregado correctamente");
         }
