@@ -14,14 +14,15 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public string Lugar { get; set; }
 
 
-        public void Programar(Equipo local, Equipo visitante, DateTime fecha, string lugar)
+        public Partido(Equipo local, Equipo visitante, DateTime fecha, string lugar)
         {
-            this.Local = local;
-            this.Visitante = visitante;
-            this.Fecha = fecha;
-            this.Lugar = lugar;
-            Console.WriteLine("Partido programado correctamente");
+            Local = local;
+            Visitante = visitante;
+            Fecha = fecha;
+            Lugar = lugar;
         }
+
+        
          public void MostrarResumen()
          {
             Console.WriteLine($"Partido entre {this.Local.Nombre} y {this.Visitante.Nombre} se jugará el {this.Fecha.ToShortDateString()} en {this.Lugar}");

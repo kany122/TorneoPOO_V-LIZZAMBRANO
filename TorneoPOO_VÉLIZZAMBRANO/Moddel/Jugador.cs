@@ -15,6 +15,21 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 
         public string Posicion { get; set; }
 
+
+        //CONSTRUCTOR
+        public Jugador(string nombre, int edad, int numero, string posicion)
+        {
+            this.Nombre = nombre;
+            this.Edad = edad;
+            this.Numero = numero;
+            this.Posicion = posicion;
+        }
+
+
+
+
+
+
         //METODOS, COMPORTAMIENTOS O FUNCIONES
         public void Presentar()
         {
