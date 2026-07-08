@@ -61,5 +61,11 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
                 return false;
             }
         }
+
+        public void CambiarPosicion(string nuevaPosicion)
+        {
+            Console.WriteLine($"El jugador {this.Nombre} ha cambiado su posición de '{this.Posicion}' a '{nuevaPosicion}'.");
+            this.Posicion = nuevaPosicion;
+        }
     }
 }

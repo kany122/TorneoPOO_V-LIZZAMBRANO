@@ -42,12 +42,14 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             {
                 objJugador.Presentar();
             }
-
-
-
-
-
-
         }
+
+        public void MostrarResumen()
+        {
+            Console.WriteLine($"El equipo {this.Nombre} tiene actualmente {this.Jugadores.Count} jugadores registrados.");
+        }
+
+
+
     }
 }

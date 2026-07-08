@@ -31,11 +31,17 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 
 
         public void MostrarResumen()
-         {
+        {
             Console.WriteLine($"Partido entre {this.Local.Nombre} y {this.Visitante.Nombre} se jugará el {this.Fecha.ToShortDateString()} en {this.Lugar}");
 
-         }
+        }
 
-        //Acciones: programar, mostrar resumen.
+
+        public void CambiarSede(string nuevoLugar)
+        {
+            Console.WriteLine($"[AVISO]: El partido ha sido reprogramado de '{this.Lugar}' hacia: '{nuevoLugar}'.");
+            this.Lugar = nuevoLugar;
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿using TorneoPOO_VÉLIZZAMBRANO.Moddel;
 
-Jugador objJugador1 = new Jugador("Piero Hincapié", 25, 4, "Defensa");
+Jugador objJugador1 = new Jugador("Piero Hincapié", 2, 4, "Defensa");
 
 Jugador objJugador2 = new Jugador("Enner Valencia", 32, 7, "Delantero");
 
