@@ -20,5 +20,29 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         {
             Console.WriteLine($"Hola soy {this.Nombre} tengo {this.Edad} años y mi número es el {this.Numero}");
         }
+
+        public Boolean EsMayorEdad()
+        {
+            if (this.Edad >= 18)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean EsNumeroValido()
+        {
+            if (this.Numero >0 && this.Numero < 100)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

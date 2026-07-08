@@ -8,6 +8,7 @@ objJugador1.Posicion = "Defensa";
 objJugador1.Edad = 25;
 
 
+
 Jugador objJugador2 = new Jugador();
 
 objJugador2.Nombre = "Enner Valencia";
