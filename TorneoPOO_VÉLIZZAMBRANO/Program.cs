@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using TorneoPOO_VÉLIZZAMBRANO.Generales;
 using TorneoPOO_VÉLIZZAMBRANO.Moddel;
 
 int opcion = 0;
@@ -9,9 +10,10 @@ do
     Console.WriteLine("**************Bienvenido al Torneo de Futbol del mundial 2026***************");
     Console.WriteLine("=== MENÚ PRINCIPAL ===");
     Console.WriteLine("1. Crear Jugadores");
-    Console.WriteLine("2. Crear Equipos");
-    Console.WriteLine("3. Crear Partidos");
-    Console.WriteLine("4. Salir");
+    Console.WriteLine("2. Listar Jugadores");
+    Console.WriteLine("3. Crear Equipos");
+    Console.WriteLine("4. Crear Partidos");
+    Console.WriteLine("5. Salir");
     Console.WriteLine("");
     Console.Write("Seleccione una opción: ");
     opcion = Convert.ToInt32(Console.ReadLine());
@@ -23,12 +25,15 @@ do
             crearJugador(); 
             break;
         case 2:
-            crearEquipo();
+            ListarJugadores();
             break;
         case 3:
-            crearPartido();
+            crearEquipo();
             break;
         case 4:
+            crearPartido();
+            break;
+        case 5:
             Console.WriteLine("Saliendo del programa...");
             break;
         default:
@@ -36,7 +41,18 @@ do
             break;
     }
 
-} while (opcion != 4);
+} while (opcion != 5);
+
+void ListarJugadores()
+{
+    Console.Clear();
+    Console.WriteLine("=== Jugadores Creados ===");
+    foreach (Jugador jugador in DateBase.jugadores)
+    { 
+        jugador.Presentar();
+    }
+    Console.ReadLine();
+}
 
 void crearPartido()
 {
@@ -129,6 +145,7 @@ void crearJugador()
     double estatura = Convert.ToDouble(Console.ReadLine());
 
     Jugador objJugador = new Jugador(nombre, edad, numero, posicion, nacionalidad, Convert.ToInt32(golesInput), estatura);
+    DateBase.jugadores.Add(objJugador);
     Console.WriteLine("Jugador creado exitosamente:");
     Console.ReadLine();
 }
