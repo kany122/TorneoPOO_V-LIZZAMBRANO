@@ -19,3 +19,5 @@ añadido de 3 atributos nuevos a la clase jugador
 a cada una de las clases se le añadio las propiedades 
 despues se las considero dentro del contructor de cada clase
 y se les añadio validaciones.
+Se agrego menu interactivo para el usuario, para que pueda elegir entre las opciones de crear un jugador,
+crear un equipo, crear un torneo y mostrar los datos de cada uno de ellos.
