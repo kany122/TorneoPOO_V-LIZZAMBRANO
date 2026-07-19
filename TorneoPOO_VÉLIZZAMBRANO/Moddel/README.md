@@ -23,3 +23,6 @@ Se agrego menu interactivo para el usuario, para que pueda elegir entre las opci
 crear un equipo, crear un torneo y mostrar los datos de cada uno de ellos
 //////////
 Almacenamiento de datos en memori(listar jugadores)
+
+2026-07-16
+  CRUD de Jugador

@@ -16,6 +16,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private string nacionalidad;
         private int golesMarcados;
         private double estatura;
+        private string fichado; // Nuevo atributo para indicar si el jugador está fichado o no
 
         // PROPIEDADES EXISTENTES
         public string Nombre { get => nombre; set => nombre = value; }
@@ -27,6 +28,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public string Nacionalidad { get => nacionalidad; set => nacionalidad = value; }
         public int GolesMarcados { get => golesMarcados; set => golesMarcados = value; }
         public double Estatura { get => estatura; set => estatura = value; }
+        public string Fichado { get => fichado; }
 
         // CONSTRUCTOR ACTUALIZADO
         public Jugador(string nombre, int edad, int numero, string posicion, string nacionalidad, int golesMarcados, double estatura)
@@ -62,6 +64,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.Nacionalidad = nacionalidad;
             this.GolesMarcados = golesMarcados;
             this.Estatura = estatura;
+            this.fichado = "No"; // Inicialmente, el jugador no está fichado
         }
 
         // METODOS EXISTENTES
@@ -85,5 +88,24 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             Console.WriteLine($"El jugador {this.Nombre} ha cambiado su posición de '{this.Posicion}' a '{nuevaPosicion}'.");
             this.Posicion = nuevaPosicion;
         }
+
+        public void Imprimir()
+        {
+            Console.WriteLine($"Nombre: {this.Nombre}");
+            Console.WriteLine($"Edad: {this.Edad}");
+            Console.WriteLine($"Número: {this.Numero}");
+            Console.WriteLine($"Posición: {this.Posicion}");
+            Console.WriteLine($"Nacionalidad: {this.Nacionalidad}");
+            Console.WriteLine($"Goles Marcados: {this.GolesMarcados}");
+            Console.WriteLine($"Estatura: {this.Estatura}m");
+            Console.WriteLine($"Fichado: {this.Fichado}");
+        }
+
+        private void Fichar()
+        {
+            this.fichado = "Sí";
+        }
+
+
     }
 }
