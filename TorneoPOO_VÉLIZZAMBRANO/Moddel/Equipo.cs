@@ -17,6 +17,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private string directorTecnico;
         private int añoFundacion;
         private double presupuesto;
+        private string colorUniforme; // Nuevo atributo para el color del uniforme del equipo
 
 
 
@@ -31,6 +32,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public string DirectorTecnico { get => directorTecnico; set => directorTecnico = value; }
         public int AñoFundacion { get => añoFundacion; set => añoFundacion = value; }
         public double Presupuesto { get => presupuesto; set => presupuesto = value; }
+        public string ColorUniforme { get => colorUniforme; set => colorUniforme = value; }
 
 
 
@@ -83,8 +85,21 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             Console.WriteLine($"La plantilla de {this.Nombre} (Fundado en {this.AñoFundacion}, DT: {this.DirectorTecnico}) es:");
             foreach (Jugador objJugador in Jugadores)
             {
-                objJugador.Presentar();
+                objJugador.Imprimir();
+                Console.WriteLine("----------------------------");
             }
+        }
+
+        public void Imprimir()
+        {
+            Console.WriteLine($"Equipo: {this.Nombre}");
+            Console.WriteLine($"Ciudad: {this.Ciudad}");
+            Console.WriteLine($"Director Técnico: {this.DirectorTecnico}");
+            Console.WriteLine($"Año de Fundación: {this.AñoFundacion}");
+            Console.WriteLine($"Presupuesto: ${this.Presupuesto}");
+            Console.WriteLine($"Color del Uniforme: {this.ColorUniforme}");
+            Console.WriteLine($"Número de Jugadores: {this.Jugadores.Count}");
+            ListarPlantilla();
         }
 
         public void MostrarResumen()

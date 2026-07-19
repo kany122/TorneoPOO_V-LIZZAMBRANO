@@ -7,39 +7,32 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
     public class Partido
     {
         // ATRIBUTOS EXISTENTES
+        private int id; //identificador único del partido
         private Equipo local;
         private Equipo visitante;
         private DateTime fecha;
         private string Lugar;
-
-
 
         // NUEVOS ATRIBUTOS 
         private string arbitroPrincipal;
         private double precioEntrada;
         private bool esAsistenciaClave;
 
-
-
         // PROPIEDADES EXISTENTES
+        public int Id { get => id; set => id = value; } // Nueva propiedad para el ID
         public Equipo Local { get => local; set => local = value; }
         public Equipo Visitante { get => visitante; set => visitante = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public string Lugar1 { get => Lugar; set => Lugar = value; }
-
-
 
         // NUEVAS PROPIEDADES 
         public string ArbitroPrincipal { get => arbitroPrincipal; set => arbitroPrincipal = value; }
         public double PrecioEntrada { get => precioEntrada; set => precioEntrada = value; }
         public bool EsAsistenciaClave { get => esAsistenciaClave; set => esAsistenciaClave = value; }
 
-
-
-        // CONSTRUCTOR ACTUALIZADO
-        public Partido(Equipo local, Equipo visitante, DateTime fecha, string lugar, string arbitroPrincipal, double precioEntrada, bool esAsistenciaClave)
+        // CONSTRUCTOR ACTUALIZADO (Ahora incluye el ID)
+        public Partido(int id, Equipo local, Equipo visitante, DateTime fecha, string lugar, string arbitroPrincipal, double precioEntrada, bool esAsistenciaClave)
         {
-
             // Validaciones de equipos
             if (local == null || visitante == null)
             {
@@ -53,7 +46,6 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
                 return;
             }
 
-
             // NUEVAS VALIDACIONES
             if (string.IsNullOrWhiteSpace(arbitroPrincipal))
             {
@@ -64,6 +56,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
                 throw new ArgumentException("El precio de la entrada no puede ser negativo.");
             }
 
+            this.Id = id; // Asignación del nuevo ID
             this.Local = local;
             this.Visitante = visitante;
             this.Fecha = fecha;
@@ -72,8 +65,6 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.PrecioEntrada = precioEntrada;
             this.EsAsistenciaClave = esAsistenciaClave;
         }
-
-
 
         // METODOS EXISTENTES
         public void MostrarResumen()
@@ -87,6 +78,20 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         {
             Console.WriteLine($"[AVISO]: El partido ha sido reprogramado de '{this.Lugar1}' hacia: '{nuevoLugar}'.");
             this.Lugar1 = nuevoLugar;
+        }
+
+        // MÉTODOS DE IMPRESIÓN AÑADIDOS
+        public void Imprimir()
+        {
+            string tipoPartido = EsAsistenciaClave ? "SÍ (Alto Riesgo)" : "NO (Regular)";
+            Console.WriteLine($"================ PARTIDO ID: {this.Id} ================");
+            Console.WriteLine($"Encuentro:      {this.Local.Nombre} VS {this.Visitante.Nombre}");
+            Console.WriteLine($"Fecha y Hora:   {this.Fecha.ToString("dd/MM/yyyy HH:mm")}");
+            Console.WriteLine($"Estadio/Sede:   {this.Lugar1}");
+            Console.WriteLine($"Árbitro:        {this.ArbitroPrincipal}");
+            Console.WriteLine($"Precio Entrada: ${this.PrecioEntrada:F2}");
+            Console.WriteLine($"Asistencia Clave: {tipoPartido}");
+            Console.WriteLine("=================================================");
         }
     }
 }

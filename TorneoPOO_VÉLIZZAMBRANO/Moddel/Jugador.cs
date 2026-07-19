@@ -17,6 +17,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private int golesMarcados;
         private double estatura;
         private string fichado; // Nuevo atributo para indicar si el jugador está fichado o no
+        private Equipo equipo_actual; // Nuevo atributo para almacenar el equipo actual del jugador
 
         // PROPIEDADES EXISTENTES
         public string Nombre { get => nombre; set => nombre = value; }
@@ -65,6 +66,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.GolesMarcados = golesMarcados;
             this.Estatura = estatura;
             this.fichado = "No"; // Inicialmente, el jugador no está fichado
+            this.equipo_actual = null; // Inicialmente, el jugador no pertenece a ningún equipo
         }
 
         // METODOS EXISTENTES
@@ -99,11 +101,13 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             Console.WriteLine($"Goles Marcados: {this.GolesMarcados}");
             Console.WriteLine($"Estatura: {this.Estatura}m");
             Console.WriteLine($"Fichado: {this.Fichado}");
+            Console.WriteLine($"Equipo Actual: {(this.equipo_actual != null ? this.equipo_actual.Nombre : "Sin equipo")}");
         }
 
-        private void Fichar()
+        public void Fichar(Equipo objEquipoFichado)
         {
             this.fichado = "Sí";
+            this.equipo_actual = objEquipoFichado;
         }
 
 
