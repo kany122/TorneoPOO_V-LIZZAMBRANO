@@ -2,22 +2,10 @@
 using TorneoPOO_VÉLIZZAMBRANO.Generales;
 using TorneoPOO_VÉLIZZAMBRANO.Moddel;
 
+DateBase.CargarDatos(); // Cargar datos al iniciar el programa
 int opcion = 0;
 
 // Precarga de datos iniciales
-Jugador objJugador1 = new Jugador("Sebastián", 23, 6, "Delantero", "Salinas", 18, 1.73);
-Jugador objJugador2 = new Jugador("Esteban", 28, 7, "Medio campista", "Quito", 19, 1.72);
-Jugador objJugador3 = new Jugador("Luis", 29, 10, "Defensa", "Guayaquil", 19, 1.72);
-Jugador objJugador4 = new Jugador("Lenin", 30, 4, "Arquero", "Guayaquil", 20, 1.74);
-Jugador objJugador5 = new Jugador("Jeral", 29, 14, "Defensa", "Guayaquil", 7, 1.80);
-Jugador objJugador6 = new Jugador("Quiñonez", 27, 15, "Defensa", "Guayaquil", 19, 1.72);
-
-DateBase.jugadores.Add(objJugador1);
-DateBase.jugadores.Add(objJugador2);
-DateBase.jugadores.Add(objJugador3);
-DateBase.jugadores.Add(objJugador4);
-DateBase.jugadores.Add(objJugador5);
-DateBase.jugadores.Add(objJugador6);
 
 do
 {
@@ -132,7 +120,8 @@ void crearJugador()
         double estatura = Convert.ToDouble(Console.ReadLine());
 
         Jugador objJugador = new Jugador(nombre, edad, numero, posicion, nacionalidad, goles, estatura);
-        DateBase.jugadores.Add(objJugador);
+        DateBase.Jugadores.Add(objJugador);
+        DateBase.GuardarJugador(); // Guardar inmediatamente después de crear el jugador
         Console.WriteLine("\nJugador creado exitosamente.");
     }
     catch (Exception ex)
@@ -146,8 +135,8 @@ void ListarJugadores()
 {
     Console.Clear();
     Console.WriteLine("=== Jugadores Creados ===");
-    if (DateBase.jugadores.Count == 0) Console.WriteLine("No hay jugadores registrados.");
-    foreach (Jugador jugador in DateBase.jugadores)
+    if (DateBase.Jugadores.Count == 0) Console.WriteLine("No hay jugadores registrados.");
+    foreach (Jugador jugador in DateBase.Jugadores)
     {
         jugador.Imprimir();
         Console.WriteLine("-------------------------");
@@ -161,7 +150,7 @@ void BuscarJugadores()
     Console.WriteLine("=== Buscar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a buscar:");
     string nombreIngresado = Console.ReadLine();
-    Jugador objJugador = DateBase.jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objJugador != null)
     {
         Console.WriteLine("\nJugador encontrado:");
@@ -181,7 +170,7 @@ void ActualizarJugadores()
     Console.WriteLine("=== Actualizar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a Actualizar:");
     string nombreIngresado = Console.ReadLine();
-    Jugador objJugador = DateBase.jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objJugador != null)
     {
         Console.WriteLine("\nJugador encontrado:");
@@ -215,8 +204,9 @@ void ActualizarJugadores()
         Console.WriteLine("Nueva estatura (deje en blanco para mantener):");
         string nuevaEstaturaInput = Console.ReadLine();
         if (double.TryParse(nuevaEstaturaInput, out double nuevaEstatura)) objJugador.Estatura = nuevaEstatura;
-
+        DateBase.GuardarJugador(); // Guardar inmediatamente después de actualizar el jugador
         Console.WriteLine("\nJugador actualizado exitosamente.");
+
     }
     else
     {
@@ -231,7 +221,7 @@ void EliminarJugadores()
     Console.WriteLine("=== Eliminar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a Eliminar:");
     string nombreIngresado = Console.ReadLine();
-    Jugador objJugador = DateBase.jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objJugador != null)
     {
         objJugador.Imprimir();
@@ -240,7 +230,8 @@ void EliminarJugadores()
         string confirmacion = Console.ReadLine();
         if (confirmacion.Equals("si", StringComparison.OrdinalIgnoreCase))
         {
-            DateBase.jugadores.Remove(objJugador);
+            DateBase.Jugadores.Remove(objJugador);
+            DateBase.GuardarJugador(); // Guardar inmediatamente después de eliminar el jugador
             Console.WriteLine("Jugador eliminado exitosamente.");
         }
         else
@@ -279,7 +270,7 @@ void crearEquipo()
         Equipo objEquipo = new Equipo(nombre, ciudad, dt, anioFundacion, presupuesto);
         objEquipo.ColorUniforme = colorUniforme;
 
-        DateBase.equipos.Add(objEquipo);
+        DateBase.Equipos.Add(objEquipo);
         Console.WriteLine("\nEquipo creado exitosamente.");
 
         string respuesta = "";
@@ -292,7 +283,7 @@ void crearEquipo()
             {
                 Console.WriteLine("Ingrese el nombre del jugador registrado a fichar:");
                 string nombreIngresado = Console.ReadLine();
-                Jugador objJugador = DateBase.jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+                Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
 
                 if (objJugador != null)
                 {
@@ -317,8 +308,8 @@ void ListarEquipos()
 {
     Console.Clear();
     Console.WriteLine("=== Equipos Creados ===");
-    if (DateBase.equipos.Count == 0) Console.WriteLine("No hay equipos registrados.");
-    foreach (Equipo equipo in DateBase.equipos)
+    if (DateBase.Equipos.Count == 0) Console.WriteLine("No hay equipos registrados.");
+    foreach (Equipo equipo in DateBase.Equipos)
     {
         equipo.Imprimir();
         Console.WriteLine("=========================");
@@ -332,7 +323,7 @@ void BuscarEquipo()
     Console.WriteLine("=== Buscar Equipos ===");
     Console.WriteLine("Ingrese el nombre del equipo a buscar:");
     string nombre_Ingresado = Console.ReadLine();
-    Equipo objEquipo = DateBase.equipos.Find(e => e.Nombre.Equals(nombre_Ingresado, StringComparison.OrdinalIgnoreCase));
+    Equipo objEquipo = DateBase.Equipos.Find(e => e.Nombre.Equals(nombre_Ingresado, StringComparison.OrdinalIgnoreCase));
     if (objEquipo != null)
     {
         Console.WriteLine("\nEquipo encontrado:");
@@ -352,7 +343,7 @@ void ActualizarEquipo()
     Console.WriteLine("=== Actualizar Equipos ===");
     Console.WriteLine("Ingrese el nombre del equipo a Actualizar:");
     string nombre_Ingresado = Console.ReadLine();
-    Equipo objEquipo = DateBase.equipos.Find(e => e.Nombre.Equals(nombre_Ingresado, StringComparison.OrdinalIgnoreCase));
+    Equipo objEquipo = DateBase.Equipos.Find(e => e.Nombre.Equals(nombre_Ingresado, StringComparison.OrdinalIgnoreCase));
     if (objEquipo != null)
     {
         Console.WriteLine("\nEquipo actual:");
@@ -394,14 +385,14 @@ void EliminarEquipo()
     Console.WriteLine("=== Eliminar Equipo ===");
     Console.WriteLine("Ingrese el nombre del equipo a eliminar:");
     string nombreIngresado = Console.ReadLine();
-    Equipo objEquipo = DateBase.equipos.Find(e => e.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    Equipo objEquipo = DateBase.Equipos.Find(e => e.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objEquipo != null)
     {
         Console.WriteLine($"¿Está seguro de eliminar el equipo '{objEquipo.Nombre}'? (si/no)");
         string confirmacion = Console.ReadLine();
         if (confirmacion.Equals("si", StringComparison.OrdinalIgnoreCase))
         {
-            DateBase.equipos.Remove(objEquipo);
+            DateBase.Equipos.Remove(objEquipo);
             Console.WriteLine("Equipo eliminado correctamente.");
         }
         else
@@ -425,11 +416,11 @@ void crearPartido()
 
     Console.WriteLine("Ingrese el nombre del equipo LOCAL:");
     string localInput = Console.ReadLine();
-    Equipo eLocal = DateBase.equipos.Find(e => e.Nombre.Equals(localInput, StringComparison.OrdinalIgnoreCase));
+    Equipo eLocal = DateBase.Equipos.Find(e => e.Nombre.Equals(localInput, StringComparison.OrdinalIgnoreCase));
 
     Console.WriteLine("Ingrese el nombre del equipo VISITANTE:");
     string visitanteInput = Console.ReadLine();
-    Equipo eVisitante = DateBase.equipos.Find(e => e.Nombre.Equals(visitanteInput, StringComparison.OrdinalIgnoreCase));
+    Equipo eVisitante = DateBase.Equipos.Find(e => e.Nombre.Equals(visitanteInput, StringComparison.OrdinalIgnoreCase));
 
     if (eLocal == null || eVisitante == null)
     {
@@ -457,7 +448,7 @@ void crearPartido()
 
         // CONSTRUCTOR ACTUALIZADO: Ahora le pasamos el 'id' como primer parámetro
         Partido nuevoPartido = new Partido(id, eLocal, eVisitante, fecha, lugar, arbitro, precio, clave);
-        DateBase.partidos.Add(nuevoPartido);
+        DateBase.Partidos.Add(nuevoPartido);
 
         Console.WriteLine("\nPartido programado de forma exitosa.");
     }
@@ -472,8 +463,8 @@ void ListarPartidos()
 {
     Console.Clear();
     Console.WriteLine("=== Calendario de Partidos ===");
-    if (DateBase.partidos.Count == 0) Console.WriteLine("No hay partidos agendados.");
-    foreach (Partido partido in DateBase.partidos)
+    if (DateBase.Partidos.Count == 0) Console.WriteLine("No hay partidos agendados.");
+    foreach (Partido partido in DateBase.Partidos)
     {
         // CAMBIADO: Ahora llama al nuevo método Imprimir() solicitado por el profesor
         partido.Imprimir();
@@ -489,7 +480,7 @@ void BuscarPartido()
     Console.WriteLine("Ingrese el nombre del equipo local del partido a buscar:");
     string busqueda = Console.ReadLine();
 
-    Partido part = DateBase.partidos.Find(p => p.Local.Nombre.Equals(busqueda, StringComparison.OrdinalIgnoreCase));
+    Partido part = DateBase.Partidos.Find(p => p.Local.Nombre.Equals(busqueda, StringComparison.OrdinalIgnoreCase));
     if (part != null)
     {
         Console.WriteLine("\nPartido Encontrado:");
@@ -510,7 +501,7 @@ void ActualizarPartido()
     Console.WriteLine("Ingrese el nombre del equipo local para ubicar el partido:");
     string busqueda = Console.ReadLine();
 
-    Partido part = DateBase.partidos.Find(p => p.Local.Nombre.Equals(busqueda, StringComparison.OrdinalIgnoreCase));
+    Partido part = DateBase.Partidos.Find(p => p.Local.Nombre.Equals(busqueda, StringComparison.OrdinalIgnoreCase));
     if (part != null)
     {
         Console.WriteLine("\nPartido actual:");
@@ -536,13 +527,13 @@ void EliminarPartido()
     Console.WriteLine("Ingrese el nombre del equipo local del partido a cancelar:");
     string busqueda = Console.ReadLine();
 
-    Partido part = DateBase.partidos.Find(p => p.Local.Nombre.Equals(busqueda, StringComparison.OrdinalIgnoreCase));
+    Partido part = DateBase.Partidos.Find(p => p.Local.Nombre.Equals(busqueda, StringComparison.OrdinalIgnoreCase));
     if (part != null)
     {
         Console.WriteLine($"¿Seguro que desea eliminar el partido {part.Local.Nombre} vs {part.Visitante.Nombre}? (si/no)");
         if (Console.ReadLine().Equals("si", StringComparison.OrdinalIgnoreCase))
         {
-            DateBase.partidos.Remove(part);
+            DateBase.Partidos.Remove(part);
             Console.WriteLine("Partido cancelado del fixture.");
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TorneoPOO_VÉLIZZAMBRANO.Generales;
 
 namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 {
@@ -10,6 +11,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private string nombre;
         private string ciudad;
         private List<Jugador> jugadores;
+        private int id;
 
 
 
@@ -33,6 +35,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public int AñoFundacion { get => añoFundacion; set => añoFundacion = value; }
         public double Presupuesto { get => presupuesto; set => presupuesto = value; }
         public string ColorUniforme { get => colorUniforme; set => colorUniforme = value; }
+        public int Id { get => id; set => id = value; }
 
 
 
@@ -63,6 +66,15 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.AñoFundacion = añoFundacion;
             this.Presupuesto = presupuesto;
             this.Jugadores = new List<Jugador>();
+            if (DateBase.Equipos.Count == 0)
+            {
+                this.id = 1; // Si no hay equipos, el primer ID será 1
+            }
+            else
+            {
+                this.id = DateBase.Equipos.Max(x => x.id) + 1; // Asignar un ID único basado en el máximo existente
+            }
+
         }
 
 
@@ -92,6 +104,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 
         public void Imprimir()
         {
+            Console.WriteLine($"Id: {this.Id}");
             Console.WriteLine($"Equipo: {this.Nombre}");
             Console.WriteLine($"Ciudad: {this.Ciudad}");
             Console.WriteLine($"Director Técnico: {this.DirectorTecnico}");

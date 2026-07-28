@@ -32,3 +32,8 @@ Almacenamiento de datos en memori(listar jugadores)
  CRUD DE BUSCAR  Y ACTUALIZAR Y LISTAR Y CREAR Y ELIMINARPARTIDO.
  SE CREO EL ID PARTIDO PARA PODER IDENTIFICAR CADA PARTIDO.
  SE AÑADIO IMPRIMIR PARTIDO.
+
+ 2026-07-21
+  Inicio de archivos, serializador Json 
+  Agreado Id a cada clase para poder identificar cada objeto creado
+  agregado de la clase serializador para poder guardar los datos en un archivo Json

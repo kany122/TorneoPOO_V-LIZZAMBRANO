@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TorneoPOO_VÉLIZZAMBRANO.Generales;
 
 namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 {
@@ -11,6 +12,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private int edad;
         private int numero;
         private string posicion;
+        private int id; 
 
         // NUEVOS ATRIBUTOS 
         private string nacionalidad;
@@ -30,6 +32,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public int GolesMarcados { get => golesMarcados; set => golesMarcados = value; }
         public double Estatura { get => estatura; set => estatura = value; }
         public string Fichado { get => fichado; }
+
+        public int Id { get => id; set => id = value; } 
 
         // CONSTRUCTOR ACTUALIZADO
         public Jugador(string nombre, int edad, int numero, string posicion, string nacionalidad, int golesMarcados, double estatura)
@@ -67,6 +71,14 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.Estatura = estatura;
             this.fichado = "No"; // Inicialmente, el jugador no está fichado
             this.equipo_actual = null; // Inicialmente, el jugador no pertenece a ningún equipo
+            if (DateBase.Jugadores.Count == 0)
+            {
+                this.id = 1; // Si no hay jugadores, el primer ID será 1
+            }
+            else
+            {
+                this.id = DateBase.Jugadores.Max(x => x.id) + 1; // Asignar un ID único basado en el máximo existente
+            }
         }
 
         // METODOS EXISTENTES
@@ -93,6 +105,7 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 
         public void Imprimir()
         {
+            Console.WriteLine($"Id: {this.Id}");
             Console.WriteLine($"Nombre: {this.Nombre}");
             Console.WriteLine($"Edad: {this.Edad}");
             Console.WriteLine($"Número: {this.Numero}");

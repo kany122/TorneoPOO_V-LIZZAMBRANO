@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TorneoPOO_VÉLIZZAMBRANO.Generales;
 
 namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
 {
@@ -56,7 +57,6 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
                 throw new ArgumentException("El precio de la entrada no puede ser negativo.");
             }
 
-            this.Id = id; // Asignación del nuevo ID
             this.Local = local;
             this.Visitante = visitante;
             this.Fecha = fecha;
@@ -64,6 +64,14 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.ArbitroPrincipal = arbitroPrincipal;
             this.PrecioEntrada = precioEntrada;
             this.EsAsistenciaClave = esAsistenciaClave;
+            if (DateBase.Partidos.Count == 0)
+            {
+                this.id = 1; // Si no hay partidos, el primer ID será 1
+            }
+            else
+            {
+                this.id = DateBase.Partidos.Max(x => x.id) + 1; // Asignar un ID único basado en el máximo existente
+            }
         }
 
         // METODOS EXISTENTES
