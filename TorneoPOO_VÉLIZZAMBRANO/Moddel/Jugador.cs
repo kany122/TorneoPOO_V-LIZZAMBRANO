@@ -20,6 +20,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private double estatura;
         private string fichado; // Nuevo atributo para indicar si el jugador está fichado o no
         private Equipo equipo_actual; // Nuevo atributo para almacenar el equipo actual del jugador
+        private int? equipoId {  get; set; }
+
 
         // PROPIEDADES EXISTENTES
         public string Nombre { get => nombre; set => nombre = value; }
@@ -34,6 +36,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public string Fichado { get => fichado; }
 
         public int Id { get => id; set => id = value; } 
+        public int EquipoId { get => equipoId ?? 0; set => equipoId = value; } // Propiedad para obtener el ID del equipo actual, si existe
+        public Equipo? EquipoActual { get => equipo_actual; set => equipo_actual = value; } // Propiedad para obtener el objeto del equipo actual, si existe
 
         // CONSTRUCTOR ACTUALIZADO
         public Jugador(string nombre, int edad, int numero, string posicion, string nacionalidad, int golesMarcados, double estatura)
@@ -71,14 +75,12 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.Estatura = estatura;
             this.fichado = "No"; // Inicialmente, el jugador no está fichado
             this.equipo_actual = null; // Inicialmente, el jugador no pertenece a ningún equipo
-            if (DateBase.Jugadores.Count == 0)
-            {
-                this.id = 1; // Si no hay jugadores, el primer ID será 1
-            }
-            else
-            {
-                this.id = DateBase.Jugadores.Max(x => x.id) + 1; // Asignar un ID único basado en el máximo existente
-            }
+        }
+
+        public Jugador()
+        {
+            this.fichado = "No";
+            this.equipo_actual = null;
         }
 
         // METODOS EXISTENTES

@@ -13,6 +13,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         private Equipo visitante;
         private DateTime fecha;
         private string Lugar;
+        private int? localId { get; set; }
+        private int? visitanteId { get; set; }
 
         // NUEVOS ATRIBUTOS 
         private string arbitroPrincipal;
@@ -30,6 +32,8 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
         public string ArbitroPrincipal { get => arbitroPrincipal; set => arbitroPrincipal = value; }
         public double PrecioEntrada { get => precioEntrada; set => precioEntrada = value; }
         public bool EsAsistenciaClave { get => esAsistenciaClave; set => esAsistenciaClave = value; }
+        public int? LocalId { get => localId ?? 0; set => localId = value; } // Propiedad para obtener el ID del equipo local, si existe
+        public int? VisitanteId { get => visitanteId ?? 0; set => visitanteId = value; } // Propiedad para obtener el ID del equipo visitante, si existe
 
         // CONSTRUCTOR ACTUALIZADO (Ahora incluye el ID)
         public Partido(int id, Equipo local, Equipo visitante, DateTime fecha, string lugar, string arbitroPrincipal, double precioEntrada, bool esAsistenciaClave)
@@ -64,14 +68,6 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.ArbitroPrincipal = arbitroPrincipal;
             this.PrecioEntrada = precioEntrada;
             this.EsAsistenciaClave = esAsistenciaClave;
-            if (DateBase.Partidos.Count == 0)
-            {
-                this.id = 1; // Si no hay partidos, el primer ID será 1
-            }
-            else
-            {
-                this.id = DateBase.Partidos.Max(x => x.id) + 1; // Asignar un ID único basado en el máximo existente
-            }
         }
 
         // METODOS EXISTENTES

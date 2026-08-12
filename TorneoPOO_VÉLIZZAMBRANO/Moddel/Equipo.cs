@@ -66,15 +66,11 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.AñoFundacion = añoFundacion;
             this.Presupuesto = presupuesto;
             this.Jugadores = new List<Jugador>();
-            if (DateBase.Equipos.Count == 0)
-            {
-                this.id = 1; // Si no hay equipos, el primer ID será 1
-            }
-            else
-            {
-                this.id = DateBase.Equipos.Max(x => x.id) + 1; // Asignar un ID único basado en el máximo existente
-            }
-
+           
+        }
+        public Equipo()
+        {
+          
         }
 
 
