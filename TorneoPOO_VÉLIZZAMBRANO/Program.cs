@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using TorneoPOO_VÉLIZZAMBRANO.Datos;
 using TorneoPOO_VÉLIZZAMBRANO.Generales;
 using TorneoPOO_VÉLIZZAMBRANO.Moddel;
 
-
 int opcion = 0;
-
-// Precarga de datos iniciales
 
 do
 {
@@ -97,7 +96,9 @@ do
 
 } while (opcion != 16);
 
-// MÉTODOS JUGADORES
+// ==========================================
+// MÉTODOS JUGADORES (SIN CAMBIOS)
+// ==========================================
 
 void crearJugador()
 {
@@ -121,16 +122,8 @@ void crearJugador()
         double estatura = Convert.ToDouble(Console.ReadLine());
 
         Jugador objJugador = new Jugador(nombre, edad, numero, posicion, nacionalidad, goles, estatura);
+        DateBase.Jugadores.Add(objJugador);
 
-        using (var context = new TorneoDbContext())
-        {
-            context.Jugadores.Add(objJugador);
-            context.SaveChanges();
-        }
-
-      
-        //DateBase.Jugadores.Add(objJugador);
-        //DateBase.GuardarJugador(); // Guardar inmediatamente después de crear el jugador
         Console.WriteLine("\nJugador creado exitosamente.");
     }
     catch (Exception ex)
@@ -144,13 +137,21 @@ void ListarJugadores()
 {
     Console.Clear();
     Console.WriteLine("=== Jugadores Creados ===");
-    var context = new TorneoDbContext();
-    if (context.Jugadores.Count() == 0) Console.WriteLine("No hay jugadores registrados.");
-    foreach (Jugador jugador in context.Jugadores)
+
+    using (var context = new TorneoDbContext())
     {
-        jugador.Imprimir();
-        Console.WriteLine("-------------------------");
+        var listaJugadores = context.Jugadores.ToList();
+
+        if (listaJugadores.Count == 0)
+            Console.WriteLine("No hay jugadores registrados.");
+
+        foreach (Jugador jugador in listaJugadores)
+        {
+            jugador.Imprimir();
+            Console.WriteLine("-------------------------");
+        }
     }
+
     Console.ReadLine();
 }
 
@@ -160,8 +161,8 @@ void BuscarJugadores()
     Console.WriteLine("=== Buscar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a buscar:");
     string nombreIngresado = Console.ReadLine();
-    var context = new TorneoDbContext();
-    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
+
+    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objJugador != null)
     {
         Console.WriteLine("\nJugador encontrado:");
@@ -181,8 +182,8 @@ void ActualizarJugadores()
     Console.WriteLine("=== Actualizar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a Actualizar:");
     string nombreIngresado = Console.ReadLine();
-    var context = new TorneoDbContext();
-    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
+
+    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objJugador != null)
     {
         Console.WriteLine("\nJugador encontrado:");
@@ -216,9 +217,8 @@ void ActualizarJugadores()
         Console.WriteLine("Nueva estatura (deje en blanco para mantener):");
         string nuevaEstaturaInput = Console.ReadLine();
         if (double.TryParse(nuevaEstaturaInput, out double nuevaEstatura)) objJugador.Estatura = nuevaEstatura;
-        context.SaveChanges(); 
-        Console.WriteLine("\nJugador actualizado exitosamente.");
 
+        Console.WriteLine("\nJugador actualizado exitosamente.");
     }
     else
     {
@@ -233,8 +233,8 @@ void EliminarJugadores()
     Console.WriteLine("=== Eliminar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a Eliminar:");
     string nombreIngresado = Console.ReadLine();
-    var context = new TorneoDbContext();
-    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
+
+    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
     if (objJugador != null)
     {
         objJugador.Imprimir();
@@ -243,8 +243,7 @@ void EliminarJugadores()
         string confirmacion = Console.ReadLine();
         if (confirmacion.Equals("si", StringComparison.OrdinalIgnoreCase))
         {
-            context.Jugadores.Remove(objJugador);
-            context.SaveChanges(); // Guardar inmediatamente después de eliminar el jugador
+            DateBase.Jugadores.Remove(objJugador);
             Console.WriteLine("Jugador eliminado exitosamente.");
         }
         else
@@ -259,7 +258,9 @@ void EliminarJugadores()
     Console.ReadLine();
 }
 
-// MÉTODOS EQUIPOS
+// ==========================================
+// MÉTODOS EQUIPOS (MODIFICADO PARA SQL SERVER)
+// ==========================================
 
 void crearEquipo()
 {
@@ -283,32 +284,44 @@ void crearEquipo()
         Equipo objEquipo = new Equipo(nombre, ciudad, dt, anioFundacion, presupuesto);
         objEquipo.ColorUniforme = colorUniforme;
 
-        DateBase.Equipos.Add(objEquipo);
-        Console.WriteLine("\nEquipo creado exitosamente.");
-
-        string respuesta = "";
-        do
+        using (var context = new TorneoDbContext())
         {
-            Console.WriteLine("\n¿Desea fichar e ingresar jugadores a este equipo? Si/No");
-            respuesta = Console.ReadLine();
+            context.Equipos.Add(objEquipo);
+            context.SaveChanges();
 
-            if (respuesta.Equals("si", StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine("\nEquipo creado exitosamente en la base de datos.");
+
+            string respuesta = "";
+            do
             {
-                Console.WriteLine("Ingrese el nombre del jugador registrado a fichar:");
-                string nombreIngresado = Console.ReadLine();
-                Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+                Console.WriteLine("\n¿Desea fichar e ingresar jugadores a este equipo? Si/No");
+                respuesta = Console.ReadLine();
 
-                if (objJugador != null)
+                if (respuesta.Equals("si", StringComparison.OrdinalIgnoreCase))
                 {
-                    objEquipo.AgregarJugador(objJugador);
-                    objJugador.Fichar(objEquipo);
+                    Console.WriteLine("Ingrese el nombre del jugador registrado a fichar:");
+                    string nombreIngresado = Console.ReadLine();
+
+                    // Se busca directamente en SQL Server mediante el Context
+                    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
+
+                    if (objJugador != null)
+                    {
+                        objEquipo.AgregarJugador(objJugador);
+                        objJugador.Fichar(objEquipo);
+
+                        // Guardamos el fichaje en SQL Server
+                        context.SaveChanges();
+
+                        Console.WriteLine("¡Jugador fichado con éxito!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Jugador no encontrado en el sistema.");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Jugador no encontrado en el sistema.");
-                }
-            }
-        } while (respuesta.Equals("si", StringComparison.OrdinalIgnoreCase));
+            } while (respuesta.Equals("si", StringComparison.OrdinalIgnoreCase));
+        }
     }
     catch (Exception ex)
     {
@@ -321,11 +334,18 @@ void ListarEquipos()
 {
     Console.Clear();
     Console.WriteLine("=== Equipos Creados ===");
-    if (DateBase.Equipos.Count == 0) Console.WriteLine("No hay equipos registrados.");
-    foreach (Equipo equipo in DateBase.Equipos)
+    using (var context = new TorneoDbContext())
     {
-        equipo.Imprimir();
-        Console.WriteLine("=========================");
+        // Agregamos Include para traer la lista de jugadores relacionada
+        var listaEquipos = context.Equipos.Include(e => e.Jugadores).ToList();
+
+        if (listaEquipos.Count == 0) Console.WriteLine("No hay equipos registrados.");
+
+        foreach (Equipo equipo in listaEquipos)
+        {
+            equipo.Imprimir();
+            Console.WriteLine("=========================");
+        }
     }
     Console.ReadLine();
 }
@@ -336,16 +356,20 @@ void BuscarEquipo()
     Console.WriteLine("=== Buscar Equipos ===");
     Console.WriteLine("Ingrese el nombre del equipo a buscar:");
     string nombre_Ingresado = Console.ReadLine();
-    Equipo objEquipo = DateBase.Equipos.Find(e => e.Nombre.Equals(nombre_Ingresado, StringComparison.OrdinalIgnoreCase));
-    if (objEquipo != null)
+
+    using (var context = new TorneoDbContext())
     {
-        Console.WriteLine("\nEquipo encontrado:");
-        Console.WriteLine("-------------------------");
-        objEquipo.Imprimir();
-    }
-    else
-    {
-        Console.WriteLine("Equipo no encontrado.");
+        Equipo objEquipo = context.Equipos.FirstOrDefault(e => e.Nombre.ToLower() == nombre_Ingresado.ToLower());
+        if (objEquipo != null)
+        {
+            Console.WriteLine("\nEquipo encontrado:");
+            Console.WriteLine("-------------------------");
+            objEquipo.Imprimir();
+        }
+        else
+        {
+            Console.WriteLine("Equipo no encontrado.");
+        }
     }
     Console.ReadLine();
 }
@@ -356,38 +380,43 @@ void ActualizarEquipo()
     Console.WriteLine("=== Actualizar Equipos ===");
     Console.WriteLine("Ingrese el nombre del equipo a Actualizar:");
     string nombre_Ingresado = Console.ReadLine();
-    Equipo objEquipo = DateBase.Equipos.Find(e => e.Nombre.Equals(nombre_Ingresado, StringComparison.OrdinalIgnoreCase));
-    if (objEquipo != null)
+
+    using (var context = new TorneoDbContext())
     {
-        Console.WriteLine("\nEquipo actual:");
-        Console.WriteLine($"Nombre: {objEquipo.Nombre}, Ciudad: {objEquipo.Ciudad}, DT: {objEquipo.DirectorTecnico}, Presupuesto: {objEquipo.Presupuesto}");
-        Console.WriteLine("-------------------------");
+        Equipo objEquipo = context.Equipos.FirstOrDefault(e => e.Nombre.ToLower() == nombre_Ingresado.ToLower());
+        if (objEquipo != null)
+        {
+            Console.WriteLine("\nEquipo actual:");
+            Console.WriteLine($"Nombre: {objEquipo.Nombre}, Ciudad: {objEquipo.Ciudad}, DT: {objEquipo.DirectorTecnico}, Presupuesto: {objEquipo.Presupuesto}");
+            Console.WriteLine("-------------------------");
 
-        Console.WriteLine("Nuevo nombre (deje en blanco para mantener):");
-        string nuevoNombre = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(nuevoNombre)) objEquipo.Nombre = nuevoNombre;
+            Console.WriteLine("Nuevo nombre (deje en blanco para mantener):");
+            string nuevoNombre = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(nuevoNombre)) objEquipo.Nombre = nuevoNombre;
 
-        Console.WriteLine("Nueva ciudad (deje en blanco para mantener):");
-        string nuevaCiudad = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(nuevaCiudad)) objEquipo.Ciudad = nuevaCiudad;
+            Console.WriteLine("Nueva ciudad (deje en blanco para mantener):");
+            string nuevaCiudad = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(nuevaCiudad)) objEquipo.Ciudad = nuevaCiudad;
 
-        Console.WriteLine("Nuevo Director Técnico (deje en blanco para mantener):");
-        string nuevoDt = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(nuevoDt)) objEquipo.DirectorTecnico = nuevoDt;
+            Console.WriteLine("Nuevo Director Técnico (deje en blanco para mantener):");
+            string nuevoDt = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(nuevoDt)) objEquipo.DirectorTecnico = nuevoDt;
 
-        Console.WriteLine("Nuevo presupuesto (deje en blanco para mantener):");
-        string nuevoPresupuestoInput = Console.ReadLine();
-        if (double.TryParse(nuevoPresupuestoInput, out double nuevoPresupuesto)) objEquipo.Presupuesto = nuevoPresupuesto;
+            Console.WriteLine("Nuevo presupuesto (deje en blanco para mantener):");
+            string nuevoPresupuestoInput = Console.ReadLine();
+            if (double.TryParse(nuevoPresupuestoInput, out double nuevoPresupuesto)) objEquipo.Presupuesto = nuevoPresupuesto;
 
-        Console.WriteLine("Nuevo color de uniforme (deje en blanco para mantener):");
-        string nuevoColor = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(nuevoColor)) objEquipo.ColorUniforme = nuevoColor;
+            Console.WriteLine("Nuevo color de uniforme (deje en blanco para mantener):");
+            string nuevoColor = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(nuevoColor)) objEquipo.ColorUniforme = nuevoColor;
 
-        Console.WriteLine("\nEquipo actualizado con éxito.");
-    }
-    else
-    {
-        Console.WriteLine("Equipo no encontrado.");
+            context.SaveChanges();
+            Console.WriteLine("\nEquipo actualizado con éxito.");
+        }
+        else
+        {
+            Console.WriteLine("Equipo no encontrado.");
+        }
     }
     Console.ReadLine();
 }
@@ -398,29 +427,36 @@ void EliminarEquipo()
     Console.WriteLine("=== Eliminar Equipo ===");
     Console.WriteLine("Ingrese el nombre del equipo a eliminar:");
     string nombreIngresado = Console.ReadLine();
-    Equipo objEquipo = DateBase.Equipos.Find(e => e.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
-    if (objEquipo != null)
+
+    using (var context = new TorneoDbContext())
     {
-        Console.WriteLine($"¿Está seguro de eliminar el equipo '{objEquipo.Nombre}'? (si/no)");
-        string confirmacion = Console.ReadLine();
-        if (confirmacion.Equals("si", StringComparison.OrdinalIgnoreCase))
+        Equipo objEquipo = context.Equipos.FirstOrDefault(e => e.Nombre.ToLower() == nombreIngresado.ToLower());
+        if (objEquipo != null)
         {
-            DateBase.Equipos.Remove(objEquipo);
-            Console.WriteLine("Equipo eliminado correctamente.");
+            Console.WriteLine($"¿Está seguro de eliminar el equipo '{objEquipo.Nombre}'? (si/no)");
+            string confirmacion = Console.ReadLine();
+            if (confirmacion.Equals("si", StringComparison.OrdinalIgnoreCase))
+            {
+                context.Equipos.Remove(objEquipo);
+                context.SaveChanges();
+                Console.WriteLine("Equipo eliminado correctamente.");
+            }
+            else
+            {
+                Console.WriteLine("Eliminación cancelada.");
+            }
         }
         else
         {
-            Console.WriteLine("Eliminación cancelada.");
+            Console.WriteLine("Equipo no encontrado.");
         }
-    }
-    else
-    {
-        Console.WriteLine("Equipo no encontrado.");
     }
     Console.ReadLine();
 }
 
-// MÉTODOS PARTIDOS
+// ==========================================
+// MÉTODOS PARTIDOS (SIN CAMBIOS)
+// ==========================================
 
 void crearPartido()
 {
@@ -444,7 +480,6 @@ void crearPartido()
 
     try
     {
-        // PEDIR EL NUEVO ID SOLICITADO POR EL PROFESOR
         Console.WriteLine("Ingrese el ID único del partido (número entero):");
         int id = Convert.ToInt32(Console.ReadLine());
 
@@ -459,7 +494,6 @@ void crearPartido()
         Console.WriteLine("¿Es asistencia clave? (true/false):");
         bool clave = Convert.ToBoolean(Console.ReadLine());
 
-        // CONSTRUCTOR ACTUALIZADO: Ahora le pasamos el 'id' como primer parámetro
         Partido nuevoPartido = new Partido(id, eLocal, eVisitante, fecha, lugar, arbitro, precio, clave);
         DateBase.Partidos.Add(nuevoPartido);
 
@@ -479,7 +513,6 @@ void ListarPartidos()
     if (DateBase.Partidos.Count == 0) Console.WriteLine("No hay partidos agendados.");
     foreach (Partido partido in DateBase.Partidos)
     {
-        // CAMBIADO: Ahora llama al nuevo método Imprimir() solicitado por el profesor
         partido.Imprimir();
         Console.WriteLine("");
     }
@@ -497,7 +530,6 @@ void BuscarPartido()
     if (part != null)
     {
         Console.WriteLine("\nPartido Encontrado:");
-        // CAMBIADO: También usa Imprimir() aquí para ver la ficha completa con su ID
         part.Imprimir();
     }
     else
@@ -556,7 +588,6 @@ void EliminarPartido()
     }
     Console.ReadLine();
 }
-
 
 
 
