@@ -69,6 +69,10 @@ namespace TorneoPOO_VÉLIZZAMBRANO.Moddel
             this.PrecioEntrada = precioEntrada;
             this.EsAsistenciaClave = esAsistenciaClave;
         }
+        public Partido()
+        {
+            
+        }
 
         // METODOS EXISTENTES
         public void MostrarResumen()

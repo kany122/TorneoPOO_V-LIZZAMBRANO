@@ -1,8 +1,9 @@
 ﻿using System;
+using TorneoPOO_VÉLIZZAMBRANO.Datos;
 using TorneoPOO_VÉLIZZAMBRANO.Generales;
 using TorneoPOO_VÉLIZZAMBRANO.Moddel;
 
-DateBase.CargarDatos(); // Cargar datos al iniciar el programa
+
 int opcion = 0;
 
 // Precarga de datos iniciales
@@ -120,8 +121,16 @@ void crearJugador()
         double estatura = Convert.ToDouble(Console.ReadLine());
 
         Jugador objJugador = new Jugador(nombre, edad, numero, posicion, nacionalidad, goles, estatura);
-        DateBase.Jugadores.Add(objJugador);
-        DateBase.GuardarJugador(); // Guardar inmediatamente después de crear el jugador
+
+        using (var context = new TorneoDbContext())
+        {
+            context.Jugadores.Add(objJugador);
+            context.SaveChanges();
+        }
+
+      
+        //DateBase.Jugadores.Add(objJugador);
+        //DateBase.GuardarJugador(); // Guardar inmediatamente después de crear el jugador
         Console.WriteLine("\nJugador creado exitosamente.");
     }
     catch (Exception ex)
@@ -135,8 +144,9 @@ void ListarJugadores()
 {
     Console.Clear();
     Console.WriteLine("=== Jugadores Creados ===");
-    if (DateBase.Jugadores.Count == 0) Console.WriteLine("No hay jugadores registrados.");
-    foreach (Jugador jugador in DateBase.Jugadores)
+    var context = new TorneoDbContext();
+    if (context.Jugadores.Count() == 0) Console.WriteLine("No hay jugadores registrados.");
+    foreach (Jugador jugador in context.Jugadores)
     {
         jugador.Imprimir();
         Console.WriteLine("-------------------------");
@@ -150,7 +160,8 @@ void BuscarJugadores()
     Console.WriteLine("=== Buscar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a buscar:");
     string nombreIngresado = Console.ReadLine();
-    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    var context = new TorneoDbContext();
+    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
     if (objJugador != null)
     {
         Console.WriteLine("\nJugador encontrado:");
@@ -170,7 +181,8 @@ void ActualizarJugadores()
     Console.WriteLine("=== Actualizar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a Actualizar:");
     string nombreIngresado = Console.ReadLine();
-    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    var context = new TorneoDbContext();
+    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
     if (objJugador != null)
     {
         Console.WriteLine("\nJugador encontrado:");
@@ -204,7 +216,7 @@ void ActualizarJugadores()
         Console.WriteLine("Nueva estatura (deje en blanco para mantener):");
         string nuevaEstaturaInput = Console.ReadLine();
         if (double.TryParse(nuevaEstaturaInput, out double nuevaEstatura)) objJugador.Estatura = nuevaEstatura;
-        DateBase.GuardarJugador(); // Guardar inmediatamente después de actualizar el jugador
+        context.SaveChanges(); 
         Console.WriteLine("\nJugador actualizado exitosamente.");
 
     }
@@ -221,7 +233,8 @@ void EliminarJugadores()
     Console.WriteLine("=== Eliminar Jugadores ===");
     Console.WriteLine("Ingrese el nombre del jugador a Eliminar:");
     string nombreIngresado = Console.ReadLine();
-    Jugador objJugador = DateBase.Jugadores.Find(j => j.Nombre.Equals(nombreIngresado, StringComparison.OrdinalIgnoreCase));
+    var context = new TorneoDbContext();
+    Jugador objJugador = context.Jugadores.FirstOrDefault(j => j.Nombre.ToLower() == nombreIngresado.ToLower());
     if (objJugador != null)
     {
         objJugador.Imprimir();
@@ -230,8 +243,8 @@ void EliminarJugadores()
         string confirmacion = Console.ReadLine();
         if (confirmacion.Equals("si", StringComparison.OrdinalIgnoreCase))
         {
-            DateBase.Jugadores.Remove(objJugador);
-            DateBase.GuardarJugador(); // Guardar inmediatamente después de eliminar el jugador
+            context.Jugadores.Remove(objJugador);
+            context.SaveChanges(); // Guardar inmediatamente después de eliminar el jugador
             Console.WriteLine("Jugador eliminado exitosamente.");
         }
         else
